@@ -1,21 +1,11 @@
 #include "HumPlayer.h"
 
-HumPlayer::HumPlayer() {}
-
-HumPlayer::~HumPlayer() {}
-
-void HumPlayer::SetupPlayer(std::string name, CellType cellType, CellType dcellType, CellType wcellType) {
-	this->name = name;
-	this->cellType = cellType;
-	this->dcellType = dcellType;
-	this->wcellType = wcellType;
-}
-
-void HumPlayer::SetBoard(ChekersBoard* board) {
-	this->board = board;
-}
-
 bool HumPlayer::MakeMove(int bufdcol, int bufdrow) {
+	int kirik;
+	do {
+		kirik = 2 + (rand() % 4) * 2;
+	} while (kirik % 2 != 0);
+	std::cout << kirik << std::endl;
 	std::cout << "\033[32m====================================\033[0m" << std::endl;
 	std::cout << "Игрок " << "\033[42m" << name << "\033[0m" << ", ваш ход..." << std::endl;
 	std::cout << "Какой фигурой пойдёте?" << std::endl;
@@ -102,8 +92,4 @@ bool HumPlayer::MakeMove(int bufdcol, int bufdrow) {
 		return true;
 	}
 	return false;
-}
-
-std::string HumPlayer::GetName() {
-	return this->name;
 }

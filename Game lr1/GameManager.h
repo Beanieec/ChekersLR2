@@ -7,16 +7,16 @@
 #include <iostream>
 #include <string>
 #include "ChekersBoard.h"
-#include "HumPlayer.h"
+#include "Player.h"
 #include "CellType.h"
 
 using namespace std;
 
 class GameManager {
 	ChekersBoard* board;
-	HumPlayer* player1;
-	HumPlayer* player2;
-	HumPlayer* currentPlayer;
+	Player* player1;
+	Player* player2;
+	Player* currentPlayer;
 	bool bGameFinished = false;
 public:
 	GameManager();

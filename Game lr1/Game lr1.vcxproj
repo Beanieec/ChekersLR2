@@ -128,16 +128,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BotPlayer.cpp" />
     <ClCompile Include="gamemain.cpp" />
     <ClCompile Include="ChekersBoard.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="HumPlayer.cpp" />
+    <ClCompile Include="MonteCarlo.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RandPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BotPlayer.h" />
     <ClInclude Include="CellType.h" />
     <ClInclude Include="ChekersBoard.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="HumPlayer.h" />
+    <ClInclude Include="MonteCarlo.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="RandPlayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
