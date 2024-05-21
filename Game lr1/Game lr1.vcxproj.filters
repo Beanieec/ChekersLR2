@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="gamemain.cpp" />
+    <ClCompile Include="ChekersBoard.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="HumPlayer.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="BotPlayer.cpp" />
+    <ClCompile Include="MonteCarlo.cpp" />
+    <ClCompile Include="RandPlayer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CellType.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="ChekersBoard.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="HumPlayer.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="BotPlayer.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="MonteCarlo.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="RandPlayer.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Заголовки">
+      <UniqueIdentifier>{3767e07d-6e13-465b-bb3c-99b6ccfc4105}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
