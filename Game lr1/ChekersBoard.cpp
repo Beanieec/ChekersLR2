@@ -36,6 +36,11 @@ ChekersBoard::ChekersBoard(int size) {
 			}
 		}
 	}
+	/*cells[7][4] = CELLTYPE_WOMWHITE;
+	cells[6][5] = CELLTYPE_WOMWHITE;
+	cells[7][2] = CELLTYPE_WOMWHITE;
+	cells[3][2] = CELLTYPE_WOMWHITE;
+	cells[4][7] = CELLTYPE_WOMBLACK;*/
 }
 
 void ChekersBoard::Show() {
@@ -124,8 +129,208 @@ bool ChekersBoard::CheckLegal(int xpos, int ypos, int dxpos, int dypos, CellType
 		return false;
 	return (cells[ypos][xpos] == CELLTYPE_EBLACK);
 }
+ 
+void ChekersBoard::SimpleStep(CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* SimplCor){
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> simpleCoords;
+	for (int i = 1; i < boardsize; i++) {
+		for (int j = 0; j < boardsize; j++) {
+			HodProverka(j, i, ct, &simpleCoords);
+
+			std::random_device rd;
+			std::mt19937 g(rd());
+			std::shuffle(simpleCoords.begin(), simpleCoords.end(), g);
+
+			for (const auto& coord : simpleCoords) {
+				int dx = coord.first.first;
+				int dy = coord.first.second;
+				int kx = coord.second.first;
+				int ky = coord.second.second;
+				SimplCor->push_back(std::make_pair(std::make_pair(dx, dy), std::make_pair(kx, ky)));
+			}
+		}
+	}
+}
+
+void ChekersBoard::FightStep(CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* FightCor) {
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> FightCoords;
+	for (int i = 1; i < boardsize; i++) {
+		for (int j = 0; j < boardsize; j++) {
+			FightProverka(j, i, ct, &FightCoords);
+
+			for (const auto& coord : FightCoords) {
+				int dx = coord.first.first;
+				int dy = coord.first.second;
+				int kx = coord.second.first;
+				int ky = coord.second.second;
+				FightCor->push_back(std::make_pair(std::make_pair(dx, dy), std::make_pair(kx, ky)));
+			}
+		}
+	}
+}
+
+void ChekersBoard::HodProverka(int dxpos, int dypos, CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> *SimpCor) {
+
+	switch (ct)
+	{
+	case CELLTYPE_PWHITE:
+		if (cells[dypos][dxpos] == CELLTYPE_WOMWHITE) {
+			if (cells[dypos - 1][dxpos + 1] == CELLTYPE_EBLACK) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 1, dxpos + 1)));
+			}
+			if (cells[dypos - 1][dxpos - 1] == CELLTYPE_EBLACK) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 1, dxpos - 1)));
+			}
+		}
+		if (dypos + 1 >= boardsize) {
+			return;
+		}
+		if (cells[dypos + 1][dxpos + 1] == CELLTYPE_EBLACK) {
+			if (cells[dypos][dxpos] == CELLTYPE_PWHITE || cells[dypos][dxpos] == CELLTYPE_WOMWHITE) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 1, dxpos + 1)));
+			}
+		}
+		if (cells[dypos + 1][dxpos - 1] == CELLTYPE_EBLACK) {
+			if (cells[dypos][dxpos] == CELLTYPE_PWHITE || cells[dypos][dxpos] == CELLTYPE_WOMWHITE) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 1, dxpos - 1)));
+			}
+		}
+		break;
+
+	case CELLTYPE_PBLACK:	
+		if (cells[dypos][dxpos] == CELLTYPE_WOMBLACK) {
+			if (cells[dypos + 1][dxpos + 1] == CELLTYPE_EBLACK) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 1, dxpos + 1)));
+			}
+			if (cells[dypos + 1][dxpos - 1] == CELLTYPE_EBLACK) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 1, dxpos - 1)));
+			}
+		}
+		if (dypos - 1 <= 0) {
+			return;
+		}
+		if (cells[dypos - 1][dxpos + 1] == CELLTYPE_EBLACK) {
+			if (cells[dypos][dxpos] == CELLTYPE_PBLACK || cells[dypos][dxpos] == CELLTYPE_WOMBLACK) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 1, dxpos + 1)));
+			}
+		}
+		if (cells[dypos - 1][dxpos - 1] == CELLTYPE_EBLACK) {
+			if (cells[dypos][dxpos] == CELLTYPE_PBLACK || cells[dypos][dxpos] == CELLTYPE_WOMBLACK) {
+				SimpCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 1, dxpos - 1)));
+			}
+		}
+		break;
+	}
+}
+
+void ChekersBoard::FightProverka(int dypos, int dxpos, CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* fightCor) {
+	std::vector<std::pair<std::pair<int, int>, bool>> canfightmoreCoords;
+	switch (ct)
+	{
+	case CELLTYPE_PWHITE://белые
+		if ((cells[dypos][dxpos]) == CELLTYPE_WOMWHITE) { //Дамка
+			if ((cells[dypos - 1][dxpos + 1]) == CELLTYPE_PBLACK || (cells[dypos - 1][dxpos + 1]) == CELLTYPE_WOMBLACK) {
+				if (dypos - 2 <= 1) {
+					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
+					for (const auto& coord : canfightmoreCoords) {
+						int p = coord.first.first;
+						int o = coord.first.second;
+						fightCor->push_back(std::make_pair(std::make_pair(p, o), std::make_pair(p - 2, o + 2)));
+					}
+					return;
+				}
+				if ((cells[dypos - 2][dxpos + 2]) == CELLTYPE_EBLACK) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 2, dxpos + 2)));
+				}
+			}
+			if ((cells[dypos - 1][dxpos - 1]) == CELLTYPE_PBLACK || (cells[dypos - 1][dxpos - 1]) == CELLTYPE_WOMBLACK) {
+				if (dypos - 2 <= 1) {
+					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
+					for (const auto& coord : canfightmoreCoords) {
+						int p = coord.first.first;
+						int o = coord.first.second;
+						fightCor->push_back(std::make_pair(std::make_pair(p, o), std::make_pair(p - 2, o - 2)));
+					}
+					return;
+				}
+				if ((cells[dypos - 2][dxpos - 2]) == CELLTYPE_EBLACK) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 2, dxpos - 2)));
+				}
+			}
+		}
+		if (dypos + 2 >= boardsize) {
+			return;
+		}
+		if ((cells[dypos + 1][dxpos + 1]) == CELLTYPE_PBLACK || (cells[dypos + 1][dxpos + 1]) == CELLTYPE_WOMBLACK) { //шашка
+			if ((cells[dypos + 2][dxpos + 2]) == CELLTYPE_EBLACK) {
+				if (cells[dypos][dxpos] == CELLTYPE_PWHITE || cells[dypos][dxpos] == CELLTYPE_WOMWHITE) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 2, dxpos + 2)));
+				}
+			}
+		}
+		if ((cells[dypos + 1][dxpos - 1]) == CELLTYPE_PBLACK || (cells[dypos + 1][dxpos - 1]) == CELLTYPE_WOMBLACK) {
+			if ((cells[dypos + 2][dxpos - 2]) == CELLTYPE_EBLACK) {
+				if (cells[dypos][dxpos] == CELLTYPE_PWHITE || cells[dypos][dxpos] == CELLTYPE_WOMWHITE) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 2, dxpos - 2)));
+				}
+			}
+		}
+		break;
+	case CELLTYPE_PBLACK: //чёрные
+		if ((cells[dypos][dxpos]) == CELLTYPE_WOMBLACK) { //Дамка
+			if ((cells[dypos + 1][dxpos + 1]) == CELLTYPE_PWHITE || (cells[dypos + 1][dxpos + 1]) == CELLTYPE_WOMWHITE) {
+				if (dypos + 2 >= boardsize) {
+					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
+					for (const auto& coord : canfightmoreCoords) {
+						int p = coord.first.first;
+						int o = coord.first.second;
+						fightCor->push_back(std::make_pair(std::make_pair(p, o), std::make_pair(p + 2, o + 2)));
+					}
+					return;
+				}
+				if ((cells[dypos + 2][dxpos + 2]) == CELLTYPE_EBLACK) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 2, dxpos + 2)));
+
+				}
+			}
+			if ((cells[dypos + 1][dxpos - 1]) == CELLTYPE_PWHITE || (cells[dypos + 1][dxpos - 1]) == CELLTYPE_WOMWHITE) {
+				if (dypos + 2 >= boardsize) {
+					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
+					for (const auto& coord : canfightmoreCoords) {
+						int p = coord.first.first;
+						int o = coord.first.second;
+						fightCor->push_back(std::make_pair(std::make_pair(p, o), std::make_pair(p + 2, o - 2)));
+					}
+					return;
+				}
+				if ((cells[dypos + 2][dxpos - 2]) == CELLTYPE_EBLACK) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos + 2, dxpos - 2)));
+
+				}
+			}
+		}
+		if (dypos - 2 <= 0) {
+			return;
+		}
+		if ((cells[dypos - 1][dxpos + 1]) == CELLTYPE_PWHITE || (cells[dypos - 1][dxpos + 1]) == CELLTYPE_WOMWHITE) { //шашка
+			if ((cells[dypos - 2][dxpos + 2]) == CELLTYPE_EBLACK) {
+				if (cells[dypos][dxpos] == CELLTYPE_PBLACK || cells[dypos][dxpos] == CELLTYPE_WOMBLACK) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 2, dxpos + 2)));
+				}
+			}
+		}
+		if ((cells[dypos - 1][dxpos - 1]) == CELLTYPE_PWHITE || (cells[dypos - 1][dxpos - 1]) == CELLTYPE_WOMWHITE) {
+			if ((cells[dypos - 2][dxpos - 2]) == CELLTYPE_EBLACK) {
+				if (cells[dypos][dxpos] == CELLTYPE_PBLACK || cells[dypos][dxpos] == CELLTYPE_WOMBLACK) {
+					fightCor->push_back(std::make_pair(std::make_pair(dypos, dxpos), std::make_pair(dypos - 2, dxpos - 2)));
+				}
+			}
+		}
+		break;
+	}
+}
 
 bool ChekersBoard::MovesRule(int xpos, int ypos, int dxpos, int dypos, CellType ct, CellType wct) { //правила хода
+	
 	if (cells[dypos][dxpos] != ct && cells[dypos][dxpos] != wct) {
 		return false;
 	}
@@ -228,7 +433,7 @@ void ChekersBoard::CanFight(std::vector<std::pair<std::pair<int, int>, bool>>* c
 	if (ct == CELLTYPE_PWHITE) { //белые
 		if ((cells[dypos][dxpos]) == CELLTYPE_WOMWHITE) { //Дамка
 			if ((cells[dypos - 1][dxpos + 1]) == CELLTYPE_PBLACK || (cells[dypos - 1][dxpos + 1]) == CELLTYPE_WOMBLACK) {
-				if (dypos - 2 <= 1) {
+				if (dypos - 2 <= 0) {
 					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
 					for (const auto& coord : canfightmoreCoords) {
 						int p = coord.first.first;
@@ -245,7 +450,7 @@ void ChekersBoard::CanFight(std::vector<std::pair<std::pair<int, int>, bool>>* c
 				}
 			}
 			if ((cells[dypos - 1][dxpos - 1]) == CELLTYPE_PBLACK || (cells[dypos - 1][dxpos - 1]) == CELLTYPE_WOMBLACK) {
-				if (dypos - 2 <= 1) {
+				if (dypos - 2 <= 0) {
 					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
 					for (const auto& coord : canfightmoreCoords) {
 						int p = coord.first.first;
@@ -284,40 +489,42 @@ void ChekersBoard::CanFight(std::vector<std::pair<std::pair<int, int>, bool>>* c
 	}
 	if (ct == CELLTYPE_PBLACK) { //чёрные
 		if ((cells[dypos][dxpos]) == CELLTYPE_WOMBLACK) { //Дамка
-			if ((cells[dypos + 1][dxpos + 1]) == CELLTYPE_PWHITE || (cells[dypos + 1][dxpos + 1]) == CELLTYPE_WOMWHITE) {
-				if (dypos + 2 >= boardsize) {
-					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
-					for (const auto& coord : canfightmoreCoords) {
-						int p = coord.first.first;
-						int o = coord.first.second;
-						bool cside = coord.second;
-						canfightCoords->push_back(std::make_pair(std::make_pair(p, o), cside));
+			if (dypos != 8) {
+				if ((cells[dypos + 1][dxpos + 1]) == CELLTYPE_PWHITE || (cells[dypos + 1][dxpos + 1]) == CELLTYPE_WOMWHITE) {
+					if (dypos + 2 >= boardsize) {
+						CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
+						for (const auto& coord : canfightmoreCoords) {
+							int p = coord.first.first;
+							int o = coord.first.second;
+							bool cside = coord.second;
+							canfightCoords->push_back(std::make_pair(std::make_pair(p, o), cside));
+						}
+						return;
 					}
-					return;
-				}
-				if ((cells[dypos + 2][dxpos + 2]) == CELLTYPE_EBLACK) {
+					if ((cells[dypos + 2][dxpos + 2]) == CELLTYPE_EBLACK) {
 
-					side = false;
-					canfightCoords->push_back(std::make_pair(std::make_pair(dypos, dxpos), side));
+						side = false;
+						canfightCoords->push_back(std::make_pair(std::make_pair(dypos, dxpos), side));
 
-				}
-			}
-			if ((cells[dypos + 1][dxpos - 1]) == CELLTYPE_PWHITE || (cells[dypos + 1][dxpos - 1]) == CELLTYPE_WOMWHITE) {
-				if (dypos + 2 >= boardsize) {
-					CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
-					for (const auto& coord : canfightmoreCoords) {
-						int p = coord.first.first;
-						int o = coord.first.second;
-						bool cside = coord.second;
-						canfightCoords->push_back(std::make_pair(std::make_pair(p, o), cside));
 					}
-					return;
 				}
-				if ((cells[dypos + 2][dxpos - 2]) == CELLTYPE_EBLACK) {
+				if ((cells[dypos + 1][dxpos - 1]) == CELLTYPE_PWHITE || (cells[dypos + 1][dxpos - 1]) == CELLTYPE_WOMWHITE) {
+					if (dypos + 2 >= boardsize) {
+						CanFightOneMore(&canfightmoreCoords, dypos, dxpos, ct);
+						for (const auto& coord : canfightmoreCoords) {
+							int p = coord.first.first;
+							int o = coord.first.second;
+							bool cside = coord.second;
+							canfightCoords->push_back(std::make_pair(std::make_pair(p, o), cside));
+						}
+						return;
+					}
+					if ((cells[dypos + 2][dxpos - 2]) == CELLTYPE_EBLACK) {
 
-					side = true;
-					canfightCoords->push_back(std::make_pair(std::make_pair(dypos, dxpos), side));
+						side = true;
+						canfightCoords->push_back(std::make_pair(std::make_pair(dypos, dxpos), side));
 
+					}
 				}
 			}
 		}

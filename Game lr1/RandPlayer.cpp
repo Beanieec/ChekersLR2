@@ -5,26 +5,33 @@ bool RandPlayer::MakeMove(int bufdcol, int bufdrow) {
 	std::cout << "Игрок " << "\033[42m" << name << "\033[0m" << ", ваш ход..." << std::endl;
 	std::cout << "Какой фигурой пойдёте?" << std::endl;
 	std::cout << "Введите координаты(A1-B2): ";
-
-	/*if (cellType == CELLTYPE_PWHITE) {
-	
+	if (this->board->onlyFight(this->cellType)) {
+		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Fightcor;
+		this->board->FightStep(this->cellType, &Fightcor);
+		for (const auto& coord : Fightcor) {
+			drow = coord.first.first;
+			dcol = coord.first.second;
+			row = coord.second.first;
+			col = coord.second.second;
+		}
 	}
-	for (int i = 1; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			if (this->board->CheckLegal(col, row, dcol, drow, this->cellType, this->wcellType))
-				break;*/
+	else {
+		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Simplcor;
+		this->board->SimpleStep(this->cellType, &Simplcor);
+		for (const auto& coord : Simplcor) {
+			drow = coord.first.first;
+			dcol = coord.first.second;
+			row = coord.second.first;
+			col = coord.second.second;
+		}
+	}
+	
+	/*std::cout << drow << dcol << row << col << std::endl;*/
 
-	/*drow = 3;
-	do {
-		dcol = 2 + (rand() % 4) * 2;
-	} while (dcol % 2 != 0);
-	row = 4;
-	do {
-		col = 1 + rand() % 7;
-	} while (col % 2 == 0);
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	dletter = drow + '@';
-	letter = row + '@';*/
+	letter = row + '@';
 
 	std::cout << dletter << dcol << letter << col << std::endl;
 	std::cout << "\033[32m====================================\033[0m" << std::endl;

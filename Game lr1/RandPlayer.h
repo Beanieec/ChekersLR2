@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include <thread>
 class RandPlayer : public Player
 {
 public:

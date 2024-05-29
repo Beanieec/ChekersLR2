@@ -2,10 +2,10 @@
 
 bool HumPlayer::MakeMove(int bufdcol, int bufdrow) {
 	int kirik;
-	do {
+	/*do {
 		kirik = 2 + (rand() % 4) * 2;
 	} while (kirik % 2 != 0);
-	std::cout << kirik << std::endl;
+	std::cout << kirik << std::endl;*/
 	std::cout << "\033[32m====================================\033[0m" << std::endl;
 	std::cout << "Игрок " << "\033[42m" << name << "\033[0m" << ", ваш ход..." << std::endl;
 	std::cout << "Какой фигурой пойдёте?" << std::endl;

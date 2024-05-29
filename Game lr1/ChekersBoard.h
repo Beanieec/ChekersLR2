@@ -3,7 +3,8 @@
 #ifndef _TICTACBOARD_H_
 
 #define _TICTACBOARD_H_
-
+#include <algorithm>
+#include <random>
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -21,6 +22,11 @@ public:
 	void SetCell(CellType ct, int xpos, int ypos, int dxpos, int dypos, CellType dct);
 	void SetCell(int xpos, int ypos, CellType wct, int dxpos, int dypos, CellType dct);
 	
+	void HodProverka(int dxpos, int dypos, CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* SimpCor);
+	void FightProverka(int dypos, int dxpos, CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* fightCor);
+	void SimpleStep(CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* SimplCor);
+	void FightStep(CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* SimplCor);
+
 	bool CheckLegal(int xpos, int ypos, int bufxpos, int bufypos, int dxpos, int dypos, CellType ct);
 	bool CheckLegal(int xpos, int ypos, int dxpos, int dypos, CellType ct, CellType wct);
 	bool MovesRule(int xpos, int ypos, int dxpos, int dypos, CellType ct, CellType wct);
