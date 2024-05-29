@@ -1,5 +1,8 @@
 #pragma once
 #include "Player.h"
+#include "MonteCarlo.h"
+
+
 class BotPlayer :public Player
 {
 public:

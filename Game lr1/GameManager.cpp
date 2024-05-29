@@ -18,7 +18,7 @@ bool GameManager::Init() {
 	else if (playerType == "PC")
 		this->player1 = new BotPlayer();
 	else
-		this->player1 = new RandPlayer();
+		this->player1 = new BotPlayer();
 
 	std::cout << "¬ведите тип \033[41m2-го\033[0m игрока(HUM/PC): ";
 	std::getline(std::cin, playerType);

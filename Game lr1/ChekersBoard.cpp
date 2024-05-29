@@ -43,6 +43,21 @@ ChekersBoard::ChekersBoard(int size) {
 	cells[4][7] = CELLTYPE_WOMBLACK;*/
 }
 
+ChekersBoard::ChekersBoard(ChekersBoard* board) {
+	this->boardsize = board->boardsize;
+	this->cells = new CellType * [boardsize];
+	for (int i = 0; i < boardsize; i++) {
+		cells[i] = new CellType[boardsize];
+		for (int j = 1; j < boardsize; j++) {
+			if ((i + j) % 2 == 0) {
+				cells[i][j] = CELLTYPE_EWHITE;
+			}
+			else
+				cells[i][j] = CELLTYPE_EBLACK;
+		}
+	}
+}
+
 void ChekersBoard::Show() {
 	std::cout << "        ";
 	std::cout << "\033[30;43m  \033[0m";

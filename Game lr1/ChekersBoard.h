@@ -17,6 +17,7 @@ class ChekersBoard {
 	bool side = false;
 public:
 	ChekersBoard(int size);
+	ChekersBoard(ChekersBoard* board);
 	virtual ~ChekersBoard();
 	void Show();
 	void SetCell(CellType ct, int xpos, int ypos, int dxpos, int dypos, CellType dct);
