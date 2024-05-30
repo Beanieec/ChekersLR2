@@ -24,4 +24,3 @@ public:
 	int GetXpos() { return xpos; }
 	int GetYpos() { return ypos; }
 };
-

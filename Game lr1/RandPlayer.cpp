@@ -28,7 +28,7 @@ bool RandPlayer::MakeMove(int bufdcol, int bufdrow) {
 	
 	/*std::cout << drow << dcol << row << col << std::endl;*/
 
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	/*std::this_thread::sleep_for(std::chrono::seconds(1));*/
 
 	dletter = drow + '@';
 	letter = row + '@';

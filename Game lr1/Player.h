@@ -11,6 +11,7 @@ protected:
 	std::string name;
 	char dletter, letter;
 	int row, col, drow, dcol;
+	int mrow, mcol, mdrow, mdcol;
 	int onmorecount = 0;
 	int onlyfightcount = 0;
 public:

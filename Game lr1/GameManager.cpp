@@ -27,7 +27,7 @@ bool GameManager::Init() {
 	else if (playerType == "PC")
 		this->player2 = new BotPlayer();
 	else
-		this->player2 = new RandPlayer();
+		this->player2 = new BotPlayer();
 	
 	std::cout << "Введите имя игрока, играющего \033[47m \033[0m: ";
 	std::getline(std::cin, playerName);
@@ -64,10 +64,8 @@ void GameManager::MakeMove() {
 		ShowBoard();
 	}
 	if (this->board->CheckEndConditionScorecounter()) {
-		if (this->board->CheckEndConditionScorecounter())
-			std::cout << "          \033[4;42m" << "Игрок " << currentPlayer->GetName() << " победил!" << "\033[0m" << std::endl;
-		else
-			std::cout << "Ничья!" << std::endl;
+		/*if (this->board->CheckEndConditionScorecounter())*/
+		std::cout << "          \033[4;42m" << "Игрок " << currentPlayer->GetName() << " победил!" << "\033[0m" << std::endl;
 		this->bGameFinished = true;
 		ShowBoard();
 		std::cout << "              \033[41mКонец...\033[0m" << std::endl;

@@ -21,7 +21,7 @@ void MonteCarlo::EvalutedBoard() {
 	bool bGameFinished = false;
 
 	player1->SetupPlayer("randWhite", CELLTYPE_PWHITE, CELLTYPE_EBLACK, CELLTYPE_WOMWHITE);
-	player2->SetupPlayer("randWhite", CELLTYPE_PWHITE, CELLTYPE_EBLACK, CELLTYPE_WOMWHITE);
+	player2->SetupPlayer("randBlack", CELLTYPE_PBLACK, CELLTYPE_EBLACK, CELLTYPE_WOMBLACK);
 	player1->SetBoard(b);
 	player2->SetBoard(b);
 	currentPlayer = (this->startCellType == CELLTYPE_PWHITE) ? player1 : player2;
@@ -36,6 +36,11 @@ void MonteCarlo::EvalutedBoard() {
 		else
 			numDraw++;
 		bGameFinished = true;
+
+		delete player1;
+		delete player2;
+		delete b;
+
 		return;
 	}
 
@@ -54,10 +59,6 @@ void MonteCarlo::EvalutedBoard() {
 		}
 		currentPlayer = (currentPlayer == player1) ? player2 : player1;
 	}
-	
-	delete player1;
-	delete player2;
-	delete b;
 }
 
 void MonteCarlo::Evaluted() {
