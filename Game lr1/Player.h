@@ -5,7 +5,6 @@ class Player
 {
 protected:
 	ChekersBoard* board;
-	CellType cellType;
 	CellType dcellType;
 	CellType wcellType;
 	std::string name;
@@ -15,6 +14,7 @@ protected:
 	int onmorecount = 0;
 	int onlyfightcount = 0;
 public:
+	CellType cellType;
 	Player() {};
 	virtual ~Player() {};
 	void SetupPlayer(std::string name, CellType cellType, CellType dcellType, CellType wcellType);

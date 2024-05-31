@@ -181,14 +181,6 @@ void ChekersBoard::SimpleStep(CellType ct, std::vector<std::pair<std::pair<int, 
 			}
 		}
 	}
-	/*std::cout << sCheck.capacity() << std::endl;
-	for (const auto& coord : sCheck) {
-	int dx = coord.first.first;
-		int dy = coord.first.second;
-		int kx = coord.second.first;
-		int ky = coord.second.second;
-		std::cout << dx << dy << kx << ky << std::endl;
-	}*/
 }
 
 void ChekersBoard::FightStep(CellType ct, std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>>* FightCor) {

@@ -6,7 +6,6 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 	std::cout << "Какой фигурой пойдёте?" << std::endl;
 	std::cout << "Введите координаты(A1-B2): ";
 
-
 	std::vector<MonteCarlo*> evaluators;
 	if (this->board->onlyFight(this->cellType)) {
 		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Fightcor;
@@ -18,8 +17,7 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 			mdcol = coord.first.second;
 			mrow = coord.second.first;
 			mcol = coord.second.second;
-			if (onlyfightcount != onmorecount) {///////////////////////////////////////////////
-				/*std::cout*/
+			if (onlyfightcount != onmorecount) {
 				std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> filtrFightcor;
 				if (coord.first.first == bufdrow && coord.first.second == bufdcol) {
 					filtrFightcor.push_back(coord);
@@ -33,7 +31,6 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 			}
 			evaluators.push_back(new MonteCarlo(this->board, 100, (this->cellType == CELLTYPE_PWHITE) ? CELLTYPE_PBLACK : CELLTYPE_PWHITE, mdrow, mdcol, mrow, mcol));
 		}
-
 	}
 	else {
 		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Simplcor;
@@ -49,13 +46,10 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 			evaluators.push_back(new MonteCarlo(this->board, 100, (this->cellType == CELLTYPE_PWHITE) ? CELLTYPE_PBLACK : CELLTYPE_PWHITE, mdrow, mdcol, mrow, mcol));
 		}	
 	}
-
 	for (int i = 0; i < evaluators.size(); i++) {
 		evaluators[i]->Evaluted();
 	}
-
 	int biggestVic = -1;
-
 	for (auto evaluator = evaluators.begin(); evaluator != evaluators.end(); evaluator++)
 		if (this->cellType == CELLTYPE_PWHITE) {
 			if ((*evaluator)->GetVictor() > biggestVic)
@@ -63,10 +57,9 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 		}
 		else
 		{
-			if ((*evaluator)->GetVictor() > biggestVic)
+			if ((*evaluator)->GetLose() > biggestVic)
 				biggestVic = (*evaluator)->GetLose();
 		}
-
 	std::vector<MonteCarlo*> biggestWinEvaluaters;
 	for (auto evaluator = evaluators.begin(); evaluator != evaluators.end(); evaluator++) {
 		int numVictories;
@@ -85,10 +78,8 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 	
 	dletter = mdrow + '@';
 	letter = mrow + '@';
-
 	std::cout << dletter << mdcol << letter << mcol << std::endl;
 	std::cout << "\033[32m====================================\033[0m" << std::endl;
-
 	//повтор удара
 	if (onlyfightcount != onmorecount) {
 		if (this->board->CheckLegal(mcol, mrow, bufdcol, bufdrow, mdcol, mdrow, this->cellType)) {

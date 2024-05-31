@@ -39,20 +39,14 @@ bool RandPlayer::MakeMove(int bufdcol, int bufdrow) {
 			col = coord.second.second;
 		}
 	}
-	
-	/*std::cout << drow << dcol << row << col << std::endl;*/
 
-	/*std::this_thread::sleep_for(std::chrono::seconds(1));*/
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	dletter = drow + '@';
 	letter = row + '@';
 
 	std::cout << dletter << dcol << letter << col << std::endl;
 	std::cout << "\033[32m====================================\033[0m" << std::endl;
-
-	
-
-	
 
 	//повтор удара
 	if (onlyfightcount != onmorecount) {
