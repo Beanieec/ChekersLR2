@@ -29,9 +29,9 @@ void MonteCarlo::EvalutedBoard() {
 	if (b->CheckEndConditionScorecounter()) {
 		if (b->CheckEndConditionScorecounter()) {
 			if (currentPlayer == player1)
-				numLose++;
-			else
 				numVictor++;
+			else				
+				numLose++;
 		}
 		else
 			numDraw++;

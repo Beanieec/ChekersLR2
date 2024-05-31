@@ -5,7 +5,7 @@
 #include "HumPlayer.h"
 #include "CellType.h"
 
-int main(int argc, char* argv[]) {
+int main(/*int argc, char* argv[]*/) {
 	setlocale(LC_ALL, "Russian");
 	SetConsoleCP(1251);
 	GameManager manager;
@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
 		manager.MakeMove();
 	}
 	
+	return main();
 	SetConsoleCP(866);
 	system("pause");
 	return 228;

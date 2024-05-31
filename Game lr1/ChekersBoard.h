@@ -15,8 +15,8 @@ class ChekersBoard {
 	int boardsize;
 	CellType** cells;
 	bool side = false;
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> sC;
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> fC;
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> sCheck;
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> fCheck;
 public:
 	ChekersBoard(int size);
 	ChekersBoard(ChekersBoard* board);

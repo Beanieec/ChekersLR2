@@ -7,36 +7,75 @@ GameManager::GameManager() {}
 
 bool GameManager::Init() {
 	int boardsize = 9;
-	std::string playerType;
+	int mode;
+	static int admin = 0;
 	std::string playerName;
 	this->board = new ChekersBoard(boardsize);
-
-	std::cout << "Введите тип \033[31;47m1-го\033[0m игрока(HUM/PC): ";
-	std::getline(std::cin, playerType);
-	if (playerType == "HUM")
-		this->player1 = new HumPlayer();
-	else if (playerType == "PC")
+	std::cin >> admin;
+	switch (admin)
+	{
+	case 228:
+		
 		this->player1 = new BotPlayer();
-	else
-		this->player1 = new BotPlayer();
+		this->player2 = new RandPlayer();
+		playerName = "Monte";
+		player1->SetupPlayer(playerName, CELLTYPE_PWHITE, CELLTYPE_EBLACK, CELLTYPE_WOMWHITE);
+		playerName = "Rand";
+		player2->SetupPlayer(playerName, CELLTYPE_PBLACK, CELLTYPE_EBLACK, CELLTYPE_WOMBLACK);
+		break;
+	default:
+		std::cout << "Человек: 1" << std::endl;
+		std::cout << "МонтеКарло бот: 2" << std::endl;
+		std::cout << "Рандом бот: 3" << std::endl;
+		std::cout << "Введите тип \033[31;47m1-го\033[0m игрока: ";
+		std::cin >> mode;
+		switch (mode)
+		{
+		case 1:
+			this->player1 = new HumPlayer();
+			break;
+		case 2:
+			this->player1 = new BotPlayer();
+			break;
+		case 3:
+			this->player1 = new RandPlayer();
+			break;
+		default:
+			this->player1 = new HumPlayer();
+			break;
+		}
+		std::cin.ignore();
 
-	std::cout << "Введите тип \033[41m2-го\033[0m игрока(HUM/PC): ";
-	std::getline(std::cin, playerType);
-	if (playerType == "HUM")
-		this->player2 = new HumPlayer();
-	else if (playerType == "PC")
-		this->player2 = new BotPlayer();
-	else
-		this->player2 = new BotPlayer();
+		std::cout << "Введите тип \033[41m2-го\033[0m игрока: ";
+		std::cin >> mode;
+		switch (mode)
+		{
+		case 1:
+			this->player2 = new HumPlayer();
+			break;
+		case 2:
+			this->player2 = new BotPlayer();
+			break;
+		case 3:
+			this->player2 = new RandPlayer();
+			break;
+		default:
+			this->player2 = new HumPlayer();
+			break;
+		}
+		std::cin.ignore();
+
+		std::cout << "Введите имя игрока, играющего \033[47m \033[0m: ";
+		std::getline(std::cin, playerName);
+		player1->SetupPlayer(playerName, CELLTYPE_PWHITE, CELLTYPE_EBLACK, CELLTYPE_WOMWHITE);
+		std::cout << "Введите имя игрока, играющего \033[41m \033[0m: ";
+		std::getline(std::cin, playerName);
+		std::cout << std::endl;
+
+		player2->SetupPlayer(playerName, CELLTYPE_PBLACK, CELLTYPE_EBLACK, CELLTYPE_WOMBLACK);
+		break;
+	}
 	
-	std::cout << "Введите имя игрока, играющего \033[47m \033[0m: ";
-	std::getline(std::cin, playerName);
-	player1->SetupPlayer(playerName, CELLTYPE_PWHITE, CELLTYPE_EBLACK, CELLTYPE_WOMWHITE);
-	std::cout << "Введите имя игрока, играющего \033[41m \033[0m: ";
-	std::getline(std::cin, playerName);
-	std::cout << std::endl;
-
-	player2->SetupPlayer(playerName, CELLTYPE_PBLACK, CELLTYPE_EBLACK, CELLTYPE_WOMBLACK);
 	player2->SetBoard(this->board);
 	player1->SetBoard(this->board);
 	currentPlayer = player1;
@@ -64,7 +103,7 @@ void GameManager::MakeMove() {
 		ShowBoard();
 	}
 	if (this->board->CheckEndConditionScorecounter()) {
-		/*if (this->board->CheckEndConditionScorecounter())*/
+		
 		std::cout << "          \033[4;42m" << "Игрок " << currentPlayer->GetName() << " победил!" << "\033[0m" << std::endl;
 		this->bGameFinished = true;
 		ShowBoard();

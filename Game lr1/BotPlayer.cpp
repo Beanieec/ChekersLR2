@@ -10,18 +10,37 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 	std::vector<MonteCarlo*> evaluators;
 	if (this->board->onlyFight(this->cellType)) {
 		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Fightcor;
+		Fightcor.clear();
+		Fightcor.shrink_to_fit();
 		this->board->FightStep(this->cellType, &Fightcor);
 		for (const auto& coord : Fightcor) {
 			mdrow = coord.first.first;
 			mdcol = coord.first.second;
 			mrow = coord.second.first;
 			mcol = coord.second.second;
+			if (onlyfightcount != onmorecount) {///////////////////////////////////////////////
+				/*std::cout*/
+				std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> filtrFightcor;
+				if (coord.first.first == bufdrow && coord.first.second == bufdcol) {
+					filtrFightcor.push_back(coord);
+					for (const auto& coord : filtrFightcor) {
+						mdrow = coord.first.first;
+						mdcol = coord.first.second;
+						mrow = coord.second.first;
+						mcol = coord.second.second;
+					}
+				}
+			}
 			evaluators.push_back(new MonteCarlo(this->board, 100, (this->cellType == CELLTYPE_PWHITE) ? CELLTYPE_PBLACK : CELLTYPE_PWHITE, mdrow, mdcol, mrow, mcol));
 		}
+
 	}
 	else {
 		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Simplcor;
 		this->board->SimpleStep(this->cellType, &Simplcor);
+		if (Simplcor.empty()) {
+			return true;
+		}
 		for (const auto& coord : Simplcor) {
 			mdrow = coord.first.first;
 			mdcol = coord.first.second;
@@ -63,7 +82,7 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 	mdrow = biggestWinEvaluaters[0]->dGetXpos();
 	mcol = biggestWinEvaluaters[0]->GetYpos();
 	mrow = biggestWinEvaluaters[0]->GetXpos();
-
+	
 	dletter = mdrow + '@';
 	letter = mrow + '@';
 
@@ -99,12 +118,14 @@ bool BotPlayer::MakeMove(int bufdcol, int bufdrow) {
 			}
 			else {
 				std::cout << "       \033[37;42mÂÛ ÎÁßÇÀÍÛ ÄÎÁÈÒÜ ØÀØÊÓ\033[0m" << std::endl;
+				system("pause");
 				board->Show();
 				return MakeMove(bufdcol, bufdrow);
 			}
 		}
 		else {
 			std::cout << "       \033[37;42mÂÛ ÎÁßÇÀÍÛ ÄÎÁÈÒÜ ØÀØÊÓ\033[0m" << std::endl;
+			system("pause");
 			board->Show();
 			return MakeMove(bufdcol, bufdrow);
 		}

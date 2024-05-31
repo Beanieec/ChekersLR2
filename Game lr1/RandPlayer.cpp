@@ -13,11 +13,25 @@ bool RandPlayer::MakeMove(int bufdcol, int bufdrow) {
 			dcol = coord.first.second;
 			row = coord.second.first;
 			col = coord.second.second;
+			if (onlyfightcount != onmorecount) {
+				std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> filtrFightcor;
+				if (coord.first.first == bufdrow && coord.first.second == bufdcol) {
+					filtrFightcor.push_back(coord);
+					for (const auto& coord : filtrFightcor) {
+						drow = coord.first.first;
+						dcol = coord.first.second;
+						row = coord.second.first;
+						col = coord.second.second;
+					}
+				}
+			}
 		}
 	}
 	else {
 		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> Simplcor;
 		this->board->SimpleStep(this->cellType, &Simplcor);
+		if (Simplcor.empty())
+			return true;
 		for (const auto& coord : Simplcor) {
 			drow = coord.first.first;
 			dcol = coord.first.second;
@@ -65,12 +79,14 @@ bool RandPlayer::MakeMove(int bufdcol, int bufdrow) {
 			}
 			else {
 				std::cout << "       \033[37;42mÂÛ ÎÁßÇÀÍÛ ÄÎÁÈÒÜ ØÀØÊÓ\033[0m" << std::endl;
+				system("pause");
 				board->Show();
 				return MakeMove(bufdcol, bufdrow);
 			}
 		}
 		else {
 			std::cout << "       \033[37;42mÂÛ ÎÁßÇÀÍÛ ÄÎÁÈÒÜ ØÀØÊÓ\033[0m" << std::endl;
+			system("pause");
 			board->Show();
 			return MakeMove(bufdcol, bufdrow);
 		}
